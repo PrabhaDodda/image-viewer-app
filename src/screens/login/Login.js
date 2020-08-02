@@ -47,7 +47,7 @@ class Login extends Component{
         let passwordInput = "Password";
         if (this.state.username === usernameInput && this.state.password === passwordInput) {
             this.setState({loggedIn:'true'});
-            sessionStorage.setItem('access_token', 'AQCVoKqEkDwUSYs6alg8YUe1zn85XuHK8YxspOeQq-4_iYHGE-FVCWfENVkR6HQdJlKLVBQ3FJsE0gtXlEk-6ij_OZQB2x571yrI4_7zCoihi4mMn2dAI3ODdKqMbzz7i631IER1qibbUIofSA3lOdGvvHRrT9pUHWHYrvhlhQNf8QXI_idf7mFp15BoB9Uipq8lrRuh0_kGBWogOGLBBxwkuYsfv6F0yo3cP_GkQjuUtw');
+            sessionStorage.setItem('access_token', 'AQDZCX7mbZkd7cri3nfMbbMXQgfYFx2GK3V9DQkceZRyae_Pp2gOgSL6qD3K9X0bLjtr-rMXy6jcva_lhSOs52kALixnzR9czRb3glJSxA9-DO_BAOnAKRqOopqaqaTgNMxYFFr2wFE6aQmVHpX4IGAp1zgMxIrHoFwS-QN5KGOdd95-ay6f2udWypOCiCNtdOLi5KNyyPsbNouw0h_5uSmgnLfjm_dWNUdBTV8AMNcP4Q');
             ReactDOM.render(<Home baseUrl={this.props.baseUrl} />, document.getElementById('root'));
         }
         else {
