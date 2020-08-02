@@ -1,0 +1,22 @@
+.card-style {
+    width: 280px;
+    padding: 32px 64px 32px 64px;
+    margin: auto;
+    text-align: left;
+}
+
+.form-style {
+    width: 260px;
+}
+
+.red{
+    color: red;
+}
+
+.dispNone {
+    display: none;
+}
+
+.dispBlock {
+    display: block;
+}
