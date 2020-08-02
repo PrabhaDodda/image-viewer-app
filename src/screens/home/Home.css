@@ -1,0 +1,111 @@
+.flex-container {
+    display: flex;
+}
+
+.flex-container>div {
+    margin: 16px;
+}
+
+.user-image-grid-item {
+    margin: 15px;
+    margin-left: 8px;
+    margin-right: 5px;
+    width: auto;
+    height: auto;
+    scale: 100%;
+    justify-content: center;
+}
+
+.cardImg {
+    width: 50%;
+}
+
+.userImage{
+    min-width: 400px;
+    min-height: 400px;
+    scale: 100%;
+    margin-top: 0px;
+    position: relative;
+    justify-content: center;
+}
+
+/* Card common styles */
+
+.profilePic {
+    width: 50px;
+    padding: 0px;
+    height: 50px;
+    margin-left: 5px;
+    justify-content: center;
+}
+
+.cardStyle {
+    width: 280px;
+    padding: 32px 64px 32px 64px;
+    margin: auto;
+    text-align: left;
+}
+
+.iconBtn{
+    float: right;
+    width: 100px;
+    justify-content: center;
+}
+
+.formControl{
+    width: 350px;
+}
+
+/*   */
+
+.captionText{
+    text-align: justify;
+    margin-left: 10px;
+    margin-bottom: 0px;
+}
+
+.captionTag{
+    font-weight: bold;
+    text-align: justify;
+    margin-left: 10px;
+    color: lightblue;
+    margin-top: 0px;
+    padding-bottom: 110px;
+   
+}
+
+.favIcon {
+    float: left;
+    color: red;
+    
+}
+
+.like{
+    float: right;
+    margin-right: 385px;
+    margin-top: 13px;
+}
+
+.AddBtn {
+    float: right;
+    margin-left: 0px;
+}
+
+#addComment {
+    width: 250px;
+    margin-right: 0px;
+}
+
+.menuList {
+    width: 200px;
+}
+
+.comments-block{
+   padding-top: 10px;
+   margin-left: 0px;
+   padding-left: 0px;
+}
+
+.comment-display {
+    margin-left: 40px;
+}
