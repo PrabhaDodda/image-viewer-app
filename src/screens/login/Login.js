@@ -46,8 +46,8 @@ class Login extends Component{
         let usernameInput = "TestUser";
         let passwordInput = "Password";
         if (this.state.username === usernameInput && this.state.password === passwordInput) {
-            this.setState({loggedIn:'true'});
-            sessionStorage.setItem('access_token', 'AQDZCX7mbZkd7cri3nfMbbMXQgfYFx2GK3V9DQkceZRyae_Pp2gOgSL6qD3K9X0bLjtr-rMXy6jcva_lhSOs52kALixnzR9czRb3glJSxA9-DO_BAOnAKRqOopqaqaTgNMxYFFr2wFE6aQmVHpX4IGAp1zgMxIrHoFwS-QN5KGOdd95-ay6f2udWypOCiCNtdOLi5KNyyPsbNouw0h_5uSmgnLfjm_dWNUdBTV8AMNcP4Q');
+            this.setState({loggedIn:true});
+            sessionStorage.setItem('access_token', '"IGQVJWNUJBNko2d1pza1dubGdCdzA4QjhDeGVBNGtxNENacklaNDdpZAWlnNWJQQ0gyXzRGMkdRS082LTZAXdFdwV041MzVuNWl3aWs5Vl9SZAkxnb1laZAmxVbkluV3NZAODl5VXVpSS1BZAGYwcnpWSG1fQkFKM21najFkU2Jv');
             ReactDOM.render(<Home baseUrl={this.props.baseUrl} />, document.getElementById('root'));
         }
         else {
@@ -61,7 +61,8 @@ class Login extends Component{
             <div>
                  {this.state.loggedIn === true ?   
                     <BrowserRouter>
-                    <Redirect to="/home" Component={Login} /></BrowserRouter>
+                    <Redirect to="/home" Component={Login} />
+                    </BrowserRouter>
                     :
                     <div>
                         {/* Calling Header definitions */}

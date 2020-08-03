@@ -8,7 +8,7 @@ class Header extends Component{
             <div>
                 <header className="app-header">
                 <a id="app-logo">Image Viewer</a>
-                    </header>
+                </header>       
             </div>
         )
     }

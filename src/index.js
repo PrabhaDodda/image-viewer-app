@@ -1,13 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Login from './screens/login/Login';
+import 'typeface-roboto';
+import * as serviceWorker from './serviceWorker';
+import Controller from './screens/Controller';
 
-
-ReactDOM.render(
-
-        <Login baseUrl='/home' />
-
-    ,
-    document.getElementById('root')
-);
+ReactDOM.render(<Controller/>, document.getElementById('root'));
