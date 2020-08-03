@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Home.css';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, rgbToHex, StylesProvider } from '@material-ui/core/styles';
 import Header from '../../common/header/Header';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
@@ -17,28 +17,22 @@ import { Redirect } from 'react-router-dom'
 import * as moment from 'moment';
 
 
+
 const styles = theme => ({
     root: {
         flexGrow: 1,
         backgroundColor: theme.palette.background.paper,
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-around',
-        overflow: 'hidden',
     },
       card: {
-        maxWidth: 550,
-        margin: 20,
-        height: 'auto',
-        marginLeft: '4%',
+        maxWidth: "100%",
       },
      avatar: {
-        margin: 15,
+        margin: 10,
         width: 60,
         height: 60,
      },
      hr: {
-        width: 460,
+        maxWidth: "100%",
      },
      icon: {
         margin: theme.spacing(1),
@@ -73,6 +67,8 @@ class Home extends Component{
 
     constructor(){
         super();
+        this.imgdata = [];
+        this.data = 'No data received';
         this.state = {
             profilePic: [],
             access_token: sessionStorage.getItem("access_token"),
@@ -100,27 +96,38 @@ class Home extends Component{
             let that = this;
             xhrEndPt1.addEventListener("readystatechange", function(){
                 if (this.readyState === 4){
-                    console.log(JSON.parse(this.responseText));
-                    that.setState({profilePic: JSON.parse(this.responseText).data.profile_picture});
+                    console.log(this.responseText);
+                    // that.setState({profilePic: JSON.parse(this.responseText).data.profile_picture});
+                    that.setState({profilePic: ''});
+                    // that.setState({data: JSON.parse(this.responseText).data});
+                    that.data = JSON.parse(this.responseText).data;
+
+                    that.data.forEach(element => {
+
+                      let xhrEndPt2 = new XMLHttpRequest();
+                      let that1 = that;
+                      xhrEndPt2.addEventListener("readystatechange", function(){
+                          if (this.readyState === 4) {
+
+                            let responseData = JSON.parse(this.responseText);
+                            responseData.likes = 10;
+                            responseData.imgid = element.id;
+                            responseData.comment = "comment for image id " + element.id;
+                            that1.imgdata.push(responseData); 
+                            that.setState({userImages: that1.imgdata});
+                            console.log(JSON.parse(this.responseText));
+                           }                
+                      });
+                      xhrEndPt2.open("GET", that1.props.baseUrl + element.id + "?fields=id,media_type,media_url,username,timestamp&access_token=IGQVJWNUJBNko2d1pza1dubGdCdzA4QjhDeGVBNGtxNENacklaNDdpZAWlnNWJQQ0gyXzRGMkdRS082LTZAXdFdwV041MzVuNWl3aWs5Vl9SZAkxnb1laZAmxVbkluV3NZAODl5VXVpSS1BZAGYwcnpWSG1fQkFKM21najFkU2Jv", true);
+                      xhrEndPt2.send(null);
+        
+                    });
+                    
                }
+               
             });
-            xhrEndPt1.open("GET", this.props.baseUrl+"?access_token=AQDZCX7mbZkd7cri3nfMbbMXQgfYFx2GK3V9DQkceZRyae_Pp2gOgSL6qD3K9X0bLjtr-rMXy6jcva_lhSOs52kALixnzR9czRb3glJSxA9-DO_BAOnAKRqOopqaqaTgNMxYFFr2wFE6aQmVHpX4IGAp1zgMxIrHoFwS-QN5KGOdd95-ay6f2udWypOCiCNtdOLi5KNyyPsbNouw0h_5uSmgnLfjm_dWNUdBTV8AMNcP4Q");
+            xhrEndPt1.open("GET", this.props.baseUrl + "me/media?fields=id,caption&access_token=IGQVJWNUJBNko2d1pza1dubGdCdzA4QjhDeGVBNGtxNENacklaNDdpZAWlnNWJQQ0gyXzRGMkdRS082LTZAXdFdwV041MzVuNWl3aWs5Vl9SZAkxnb1laZAmxVbkluV3NZAODl5VXVpSS1BZAGYwcnpWSG1fQkFKM21najFkU2Jv", true);
             xhrEndPt1.send(null);
-
-            //call to API End point2
-
-            let xhrEndPt2 = new XMLHttpRequest();
-            let that1 = this;
-            xhrEndPt2.addEventListener("readystatechange", function(){
-                if (this.readyState === 4) {
-                 console.log(JSON.parse(this.responseText).data);
-                 that1.setState({userImages: JSON.parse(this.responseText).data});
-                 that1.setState({filteredRes:that1.state.userImages});
-                 console.log(JSON.parse(this.responseText));
-                 }                
-            });
-            xhrEndPt2.open("GET",this.props.baseUrl+"media/recent?access_token=AQDZCX7mbZkd7cri3nfMbbMXQgfYFx2GK3V9DQkceZRyae_Pp2gOgSL6qD3K9X0bLjtr-rMXy6jcva_lhSOs52kALixnzR9czRb3glJSxA9-DO_BAOnAKRqOopqaqaTgNMxYFFr2wFE6aQmVHpX4IGAp1zgMxIrHoFwS-QN5KGOdd95-ay6f2udWypOCiCNtdOLi5KNyyPsbNouw0h_5uSmgnLfjm_dWNUdBTV8AMNcP4Q");
-            xhrEndPt2.send(null);
 
             }
 
@@ -149,7 +156,7 @@ class Home extends Component{
        
                      
         myDateFun = (imgdate) => {
-          return moment(new Date(parseInt(imgdate))).format("DD/MM/YYYY HH:mm:ss");
+          return moment(new Date(parseInt(imgdate, 10))).format("DD/MM/YYYY HH:mm:ss");
         }
          
        //Click event for adding comments entered in the comment input area
@@ -174,22 +181,18 @@ class Home extends Component{
   // comment handler definitions
 
   onCommentChangeHandler = (event, imageId) => {
-      var comment = {
-          id: imageId,
-          text: event.target.value,
-      }
       this.setState({
         ...this.state,
-        commentText: comment,
+        comment: event.target.value,
       });
   }
 
                       
         render() {
             const { classes } = this.props;
-
+            
              return(
-            <div>
+            <div> 
                 <Header 
                 baseUrl={this.props.baseUrl}
                 showSearchBox="true" 
@@ -200,37 +203,35 @@ class Home extends Component{
                 {this.state.loggedIn === true ?
                 <div>             
                     <GridList cols={2} cellHeight='auto'>
-                    {this.state.userImages.map(img =>(
-                        <Card className={classes.card} key={"card"+img.id}>
+                        {
+                          this.state.userImages.map((tile) => (
+                            <Card className={classes.card} key={"card"+" " + tile.imgid}>
                             <CardHeader avatar={
                              <Avatar alt="profile-Pic" src={(this.state.profilePic).toString()} className={classes.avatar}/>
                             }    
-                             title={img.user.username}     
-                            subheader = {this.myDateFun(img.created_time)}>
+                             title={tile.username}     
+                            subheader={tile.timestamp}>
                             </CardHeader>
                             <CardContent>
-                            <GridListTile key={"userImg"+ img.id} className="user-image-grid-item">
-                                <img src={img.images.standard_resolution.url} className="userImage" alt={img.caption.text}/>
+                            <GridListTile key={"userImg"+ " " + tile.imgid} className="user-image-grid-item">
+                                <img src={tile.media_url} className="userImage" alt="my image"/>
                             </GridListTile>
                             <div className="imgTiltleTag">
                             <hr className={classes.hr}/>
-                            <h4 className="captionText">{(img.caption.text).split("#")[0]}</h4>
-                            {img.tags.map(tags=>(
-                               <span className="captionTag" key={"tags"+tags}>{("#"+tags+"")}</span>
-                            ))} <br/></div>
+                            <h4 className="captionText">My image</h4>
+                               <span className="captionTag" key={"tags"+ "-my tags"}>{("#"+"my photo"+"")}</span>
+                             <br/></div>
                            <div className="comments-block">
-                          {this.state.comments.map(comment => (
-                           img.id === comment.imageId ?
-                           <div className="comment-display" key={comment.id}>
-                           {img.user.username}: {comment.text}
-                               </div> : null
-                          ))}
+
+                           <div className="comment-display" key=" 123456789">
+                           {tile.username}: {tile.comment}
+                               </div>
                               </div>
                              <span onClick={(event)=>this.setState({favClick: !this.state.favClick})}>
                              {this.state.favClick === true? <div>
                              <span className="favIcon"><FavoriteIcon className={classes.icon}/></span>
-                              <span className="like">{" "+ (img.likes.count)--} likes</span> </div>:
-                           <div><span><FavoriteBorderIcon className={classes.icon}/></span>  <span className="like">{" "+ (img.likes.count)++} likes</span></div> } 
+                              <span className="like">{" "+ (tile.likes)--} likes</span> </div>:
+                           <div><span><FavoriteBorderIcon className={classes.icon}/></span>  <span className="like">{" "+ (tile.likes)++} likes</span></div> } 
                             </span>
                              <br/><br/>
                                                       
@@ -241,18 +242,19 @@ class Home extends Component{
                               id="addComment" 
                               type="text" 
                               comment={this.state.addComment} 
-                              onChange={(event) => this.onCommentChangeHandler(event, img.id)} value={img.id === this.state.commentText.id ? this.state.commentText.text : ""} 
+                              onChange={(event) => this.onCommentChangeHandler(event, tile.imgid)} value={this.state.comment}
                               />
                             </FormControl>
-                            <Button variant="contained" color="primary" className="AddBtn"  onClick={() => this.onClickAddBtn(img.id)}>
+                            <Button variant="contained" color="primary" className="AddBtn"  onClick={() => this.onClickAddBtn(tile.imgid)}>
                                 ADD
                             </Button>
                         </div>
                             </CardContent>
                          </Card>
-                    ))}
+
+                          ))}
                  </GridList>
-                 </div> : <Redirect to="/" />
+                 </div> : <Redirect to="/" /> 
                 }
                         
             </div>
